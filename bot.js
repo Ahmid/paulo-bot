@@ -1,3 +1,10 @@
+var express = require ('express');
+var app = express();
+
+app.get('/', function (req,res){
+    res.send('Hello!!!');
+});
+
 const TeleBot = require('telebot');
 const bot = new TeleBot('372091526:AAHdKP9UQsi8FTBqsmJ0P2hX4BdnkUTIEG0');
 
@@ -10,3 +17,4 @@ bot.on('text', msg => {
 
 
 bot.connect();
+app.listen(3005);
