@@ -15,7 +15,11 @@ app.get('/', function (req,res){
 //   let reply = msg.message_id;
 //   return bot.sendMessage(fromId, `Welcome, ${ firstName }!`, { reply });
 // });
-
-
 // bot.connect();
-app.listen(PORT);
+
+
+app.use(express.static(__dirname + "/public"));
+
+app.listen(PORT, function () {
+    console.log ('Express server started on port ' + PORT + '!');
+});
