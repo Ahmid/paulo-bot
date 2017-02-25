@@ -122,7 +122,7 @@ bot.on('/start', msg => {
     let fromId = msg.from.id;
     let firstName = msg.from.first_name;
     let username = msg.from.username;
-    let lastName = msg.from.lastName;
+    let lastName = msg.from.last_name;
 
     if (firstName) {
         return bot.sendMessage(fromId, "Hello " + firstName + "! 😊\nHope you will enjoy the daily quotes!\n\n" +
@@ -152,7 +152,7 @@ bot.on('/list', msg => {
 bot.on(['/paulo','/Paulo','/PAULO'], msg => {
     let fromId = msg.from.id;
     let firstName = msg.from.first_name;
-    let lastName = msg.from.lastName;
+    let lastName = msg.from.last_name;
 
     checkDates('paulo');
     console.log (firstName + " " + lastName + " checked paulo");
@@ -162,7 +162,7 @@ bot.on(['/paulo','/Paulo','/PAULO'], msg => {
 bot.on(['/kafka','/Kafka','KAFKA'], msg => {
     let fromId = msg.from.id;
     let firstName = msg.from.first_name;
-    let lastName = msg.from.lastName;
+    let lastName = msg.from.last_name;
 
     checkDates('kafka');
     console.log (firstName + " " + lastName + " checked kafka");
@@ -172,7 +172,7 @@ bot.on(['/kafka','/Kafka','KAFKA'], msg => {
 bot.on(['/Einstein','/einstein','EINSTEIN'], msg => {
     let fromId = msg.from.id;
     let firstName = msg.from.first_name;
-    let lastName = msg.from.lastName;
+    let lastName = msg.from.last_name;
 
     checkDates('einstein');
     console.log (firstName + " " + lastName + " checked einstien");
@@ -182,7 +182,7 @@ bot.on(['/Einstein','/einstein','EINSTEIN'], msg => {
 bot.on(['/oscar','/Oscar','oscarWilde','OSCARWILDE'], msg => {
     let fromId = msg.from.id;
     let firstName = msg.from.first_name;
-    let lastName = msg.from.lastName;
+    let lastName = msg.from.last_name;
 
     checkDates('oscar');
     console.log (firstName + " " + lastName + " checked oscar");
