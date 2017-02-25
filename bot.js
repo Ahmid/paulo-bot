@@ -135,7 +135,7 @@ function FillKafkaArray (page) {
     });
 }
 
-function FillKafkaArray (page) {
+function FillMarkArray (page) {
     url = 'https://www.goodreads.com/author/quotes/1244.Mark_Twain?page=' + page;
     request(url, function(error, response, html) {
         if(!error) {
