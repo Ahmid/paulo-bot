@@ -12,6 +12,7 @@ var KafkaQuotes = [];
 var OscarQuotes = [];
 var EiensteinQuotes = [];
 var GhandiQuotes = [];
+var MarkQuotes = [];
 var date = new Date();
 var month = date.getUTCMonth();
 var day;
@@ -30,6 +31,8 @@ function checkDates (writer) {
             FillEiensteinArray (newDate.getUTCMonth());
         else if (writer === 'ghandi')
             FillGhandiArray (newDate.getUTCMonth());
+        else if (writer === 'mark')
+            FillMarkArray (newDate.getUTCMonth());
         month = newDate.getUTCMonth();
     }
 
@@ -132,11 +135,29 @@ function FillKafkaArray (page) {
     });
 }
 
+function FillKafkaArray (page) {
+    url = 'https://www.goodreads.com/author/quotes/1244.Mark_Twain?page=' + page;
+    request(url, function(error, response, html) {
+        if(!error) {
+            var $ = cheerio.load(html);
+
+            $('.quotes .quote .quoteDetails .quoteText').each (function (i, elm) {
+
+                var data = $(this).first().contents().filter (function () {
+                    return this.type === 'text';
+                }).text().replace(/[^a-zA-Z ]/g, "").trim();
+
+                MarkQuotes.push(data + ".");
+            });
+        }
+    });
+}
+
 bot.on(['audio','voice','photo'], msg => {
     let fromId = msg.from.id;
 
     return bot.sendMessage(fromId, "Type / followed by writer's name to get the daily quote!" + 
-    "\n\nList of available writers:\n-/Paulo\n-/Kafka\n-/OscarWilde\n-/Einstein");
+    "\n\nList of available writers:\n-/Paulo\n-/Kafka\n-/OscarWilde\n-/Einstein\n-/Gandhi\n-/Mark");
 });
 
 bot.on('/start', msg => {
@@ -167,7 +188,8 @@ bot.on('/start', msg => {
 bot.on('/list', msg => {
     let fromId = msg.from.id;
 
-    return bot.sendMessage(fromId, "List of available writers:\n\n-/Paulo\n-/Kafka\n-/OscarWilde\n-/Einstein\n-/Ghandi");
+    return bot.sendMessage(fromId, "List of available writers:\n\n-/Paulo\n-/Kafka\n-/OscarWilde\n-/Einstein\n-/Ghandi"+
+    "\n-/Mark");
 });
 
 bot.on(['/paulo','/Paulo','/PAULO'], msg => {
@@ -220,6 +242,15 @@ bot.on(['/oscar','/Oscar','/oscarWilde','/OSCARWILDE'], msg => {
     return bot.sendMessage(fromId, "🍂Today's Oscar quote:🍂\n\n" + OscarQuotes[day]);
 });
 
+bot.on(['/mark','/Mark','/MARK'], msg => {
+    let fromId = msg.from.id;
+    let firstName = msg.from.first_name;
+    let lastName = msg.from.last_name;
+
+    checkDates('mark');
+    console.log (new Date() + ": " + firstName + " " + lastName + " checked Mark");
+    return bot.sendMessage(fromId, "🍂Today's Mark quote:🍂\n\n" + MarkQuotes[day]);
+});
 bot.connect();
 
 FillPauloArray(month);
@@ -227,5 +258,6 @@ FillKafkaArray(month);
 FillOscarArray(month);
 FillEiensteinArray(month);
 FillGhandiArray(month);
+FillMarkArray(month);
 app.listen(PORT)
 exports = module.exports = app;
