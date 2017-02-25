@@ -122,18 +122,22 @@ bot.on('/start', msg => {
     let fromId = msg.from.id;
     let firstName = msg.from.first_name;
     let username = msg.username;
+    let lastName = msg.lastName;
 
     if (firstName) {
         return bot.sendMessage(fromId, "Hello " + firstName + "! 😊\nHope you will enjoy the daily quotes!\n\n" +
         "Type /list to list available writers.");
+        console.log (firstName + " " + lastName + " joined!");
     }
     else if (username) {
         return bot.sendMessage(fromId, "Hello " + username + "! 😊\nHope you will enjoy the daily quotes!\n\n"+
         "Type /list to list available writers.");
+        console.log (username + " joined!");
     }
     else {
         return bot.sendMessage(fromId, "Hello 😊\nHope you will enjoy the daily quotes!\n\n"+
         "Type /list to list available writers.");
+        console.log ("Anonymous joined!" );
     }
 
    
@@ -147,29 +151,41 @@ bot.on('/list', msg => {
 
 bot.on(['/paulo','/Paulo','/PAULO'], msg => {
     let fromId = msg.from.id;
+    let firstName = msg.from.first_name;
+    let lastName = msg.lastName;
 
     checkDates('paulo');
+    console.log (firstName + " " + lastName + " checked paulo");
     return bot.sendMessage(fromId, "🍂Today's Paulo quote:🍂\n\n" + PauloQuotes[day]);
 });
 
 bot.on(['/kafka','/Kafka','KAFKA'], msg => {
     let fromId = msg.from.id;
+    let firstName = msg.from.first_name;
+    let lastName = msg.lastName;
 
     checkDates('kafka');
+    console.log (firstName + " " + lastName + " checked kafka");
     return bot.sendMessage(fromId, "🍂Today's Kafka quote:🍂\n\n" + KafkaQuotes[day]);
 });
 
 bot.on(['/Einstein','/einstein','EINSTEIN'], msg => {
     let fromId = msg.from.id;
+    let firstName = msg.from.first_name;
+    let lastName = msg.lastName;
 
     checkDates('einstein');
+    console.log (firstName + " " + lastName + " checked einstien");
     return bot.sendMessage(fromId, "🍂Today's Einstein quote:🍂\n\n" + EiensteinQuotes[day]);
 });
 
 bot.on(['/oscar','/Oscar','oscarWilde','OSCARWILDE'], msg => {
     let fromId = msg.from.id;
+    let firstName = msg.from.first_name;
+    let lastName = msg.lastName;
 
     checkDates('oscar');
+    console.log (firstName + " " + lastName + " checked oscar");
     return bot.sendMessage(fromId, "🍂Today's Oscar quote:🍂\n\n" + OscarQuotes[day]);
 });
 
