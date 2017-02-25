@@ -12,6 +12,7 @@ var KafkaQuotes = [];
 var OscarQuotes = [];
 var date = new Date();
 var month = date.getUTCMonth();
+var day;
 
 function checkDates (writer) {
     var newDate = new Date();
@@ -25,9 +26,12 @@ function checkDates (writer) {
         month = newDate.getUTCMonth();
     }
 
-    var day = date.getUTCDate();
-    if (day === 31) {
+    var newDay = date.getUTCDate();
+    if (newDay === 31) {
         day = 0;
+    }
+    else {
+        day = newDay;
     }
 }
 
@@ -126,5 +130,6 @@ bot.connect();
 
 FillPauloArray(month);
 FillKafkaArray(month);
+FillOscarArray(month);
 app.listen(PORT)
 exports = module.exports = app;
