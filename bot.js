@@ -36,7 +36,7 @@ function checkDates (writer) {
         month = newDate.getUTCMonth();
     }
 
-    var newDay = date.getUTCDate();
+    var newDay = newDate.getUTCDate();
     if (newDay === 31) {
         day = 0;
     }
