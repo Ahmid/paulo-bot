@@ -110,7 +110,7 @@ function FillKafkaArray (page) {
     });
 }
 
-bot.on(['/help','audio','voice','photo'], msg => {
+bot.on(['audio','voice','photo'], msg => {
     let fromId = msg.from.id;
 
     return bot.sendMessage(fromId, "Type / followed by writer's name to get the daily quote!" + 
@@ -120,9 +120,22 @@ bot.on(['/help','audio','voice','photo'], msg => {
 bot.on('/start', msg => {
     let fromId = msg.from.id;
     let firstName = msg.from.first_name;
+    let username = msg.username;
 
-    return bot.sendMessage(fromId, "Hello " + firstName + "! 😊\nHope you will enjoy the daily quotes!\n\n" +
-    "-Type /help when needed.\n-Type /list to list available writers.");
+    if (firstName) {
+        return bot.sendMessage(fromId, "Hello " + firstName + "! 😊\nHope you will enjoy the daily quotes!\n\n" +
+        "Type /list to list available writers.");
+    }
+    else if (username) {
+        return bot.sendMessage(fromId, "Hello " + username + "! 😊\nHope you will enjoy the daily quotes!\n\n"+
+        "Type /list to list available writers.");
+    }
+    else {
+        return bot.sendMessage(fromId, "Hello 😊\nHope you will enjoy the daily quotes!\n\n"+
+        "Type /list to list available writers.");
+    }
+
+   
 });
 
 bot.on('/list', msg => {
@@ -152,7 +165,7 @@ bot.on(['/Einstein','/einstein','EINSTEIN'], msg => {
     return bot.sendMessage(fromId, "🍂Today's Einstein quote:🍂\n\n" + EiensteinQuotes[day]);
 });
 
-bot.on(['/OscarWilde','/oscarwilde','oscarWilde','OSCARWILDE'], msg => {
+bot.on(['/oscar','/Oscar','oscarWilde','OSCARWILDE'], msg => {
     let fromId = msg.from.id;
 
     checkDates('oscar');
@@ -160,7 +173,6 @@ bot.on(['/OscarWilde','/oscarwilde','oscarWilde','OSCARWILDE'], msg => {
 });
 
 bot.connect();
-
 
 FillPauloArray(month);
 FillKafkaArray(month);
