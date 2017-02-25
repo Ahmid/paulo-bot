@@ -49,7 +49,7 @@ function FillKafkaArray (page) {
     });
 }
 
-bot.on(['text','audio','voice','photo'], msg => {
+bot.on(['/help','audio','voice','photo'], msg => {
     let fromId = msg.from.id;
 
     return bot.sendMessage(fromId, "Type / followed by writer's name to get the daily quote!" + 
