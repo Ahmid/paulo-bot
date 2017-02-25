@@ -53,14 +53,15 @@ bot.on(['/help','audio','voice','photo'], msg => {
     let fromId = msg.from.id;
 
     return bot.sendMessage(fromId, "Type / followed by writer's name to get the daily quote!" + 
-    "\n\nExample:\n/paulo\n/kafka");
+    "\n\nExample:\n/paulo\n\nList of available writers:\n-Paulo\n-Kafka");
 });
 
 bot.on('/start', msg => {
     let fromId = msg.from.id;
     let firstName = msg.from.first_name;
 
-    return bot.sendMessage(fromId, "Hello " + firstName + "! 😊\nHope you will enjoy the daily quotes!");
+    return bot.sendMessage(fromId, "Hello " + firstName + "! 😊\nHope you will enjoy the daily quotes!\n\n" +
+    "Type /help when needed.");
 });
 
 bot.on(['/paulo','/Paulo','/PAULO'], msg => {
