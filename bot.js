@@ -10,6 +10,7 @@ const bot = new TeleBot('305749132:AAF7gJgtnYp4lV4K1cRZ4ANv5eA6xe3rHjs');
 var PauloQuotes = [];
 var KafkaQuotes = [];
 var OscarQuotes = [];
+var EiensteinQuotes = [];
 var date = new Date();
 var month = date.getUTCMonth();
 var day;
@@ -23,6 +24,8 @@ function checkDates (writer) {
             FillKafkaArray (newDate.getUTCMonth());
         else if (writer === 'oscar')
             FillOscarArray (newDate.getUTCMonth());
+        else if (writer === 'einstein')
+            FillEiensteinArray (newDate.getUTCMonth());
         month = newDate.getUTCMonth();
     }
 
@@ -33,6 +36,24 @@ function checkDates (writer) {
     else {
         day = newDay;
     }
+}
+
+function FillEiensteinArray (page) {
+    url = 'https://www.goodreads.com/author/quotes/9810.Albert_Einstein?page=' + page;
+    request(url, function(error, response, html) {
+        if(!error) {
+            var $ = cheerio.load(html);
+
+            $('.quotes .quote .quoteDetails .quoteText').each (function (i, elm) {
+
+                var data = $(this).first().contents().filter (function () {
+                    return this.type === 'text';
+                }).text().replace(/[^a-zA-Z ]/g, "").trim();
+
+                EiensteinQuotes.push(data + ".");
+            });
+        }
+    });
 }
 
 function FillPauloArray (page) {
@@ -93,7 +114,7 @@ bot.on(['/help','audio','voice','photo'], msg => {
     let fromId = msg.from.id;
 
     return bot.sendMessage(fromId, "Type / followed by writer's name to get the daily quote!" + 
-    "\n\nList of available writers:\n-/Paulo\n-/Kafka\n-/OscarWilde");
+    "\n\nList of available writers:\n-/Paulo\n-/Kafka\n-/OscarWilde\n-/Einstein");
 });
 
 bot.on('/start', msg => {
@@ -101,13 +122,13 @@ bot.on('/start', msg => {
     let firstName = msg.from.first_name;
 
     return bot.sendMessage(fromId, "Hello " + firstName + "! 😊\nHope you will enjoy the daily quotes!\n\n" +
-    "-Type /help when needed.\n-Type /list to list available writers.s");
+    "-Type /help when needed.\n-Type /list to list available writers.");
 });
 
 bot.on('/list', msg => {
     let fromId = msg.from.id;
 
-    return bot.sendMessage(fromId, "List of available writers:\n\n-/Paulo\n-/Kafka\n-/OscarWilde");
+    return bot.sendMessage(fromId, "List of available writers:\n\n-/Paulo\n-/Kafka\n-/OscarWilde\n-/Einstein");
 });
 
 bot.on(['/paulo','/Paulo','/PAULO'], msg => {
@@ -124,6 +145,13 @@ bot.on(['/kafka','/Kafka','KAFKA'], msg => {
     return bot.sendMessage(fromId, "🍂Today's Kafka quote:🍂\n\n" + KafkaQuotes[day]);
 });
 
+bot.on(['/Einstein','/einstein','EINSTEIN'], msg => {
+    let fromId = msg.from.id;
+
+    checkDates('einstein');
+    return bot.sendMessage(fromId, "🍂Today's Einstein quote:🍂\n\n" + EiensteinQuotes[day]);
+});
+
 bot.on(['/OscarWilde','/oscarwilde','oscarWilde','OSCARWILDE'], msg => {
     let fromId = msg.from.id;
 
@@ -137,5 +165,6 @@ bot.connect();
 FillPauloArray(month);
 FillKafkaArray(month);
 FillOscarArray(month);
+FillEiensteinArray(month);
 app.listen(PORT)
 exports = module.exports = app;
