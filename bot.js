@@ -15,6 +15,7 @@ var date = new Date();
 var month = date.getUTCMonth();
 var day;
 
+
 function checkDates (writer) {
     var newDate = new Date();
     if (newDate.getUTCMonth() > month) {
