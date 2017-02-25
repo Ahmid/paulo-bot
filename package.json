@@ -11,6 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.14.1",
-    "telebot": "^1.0.7"
+    "telebot": "^1.0.7",
+    "request"    : "latest",
+    "cheerio"    : "latest"
   }
 }
