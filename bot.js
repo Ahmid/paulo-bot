@@ -93,7 +93,7 @@ bot.on(['/help','audio','voice','photo'], msg => {
     let fromId = msg.from.id;
 
     return bot.sendMessage(fromId, "Type / followed by writer's name to get the daily quote!" + 
-    "\n\nExample:\n/paulo\n\nList of available writers:\n-Paulo\n-Kafka\n-OscarWilde");
+    "\n\nList of available writers:\n-/Paulo\n-/Kafka\n-/OscarWilde");
 });
 
 bot.on('/start', msg => {
