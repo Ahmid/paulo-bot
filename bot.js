@@ -101,7 +101,13 @@ bot.on('/start', msg => {
     let firstName = msg.from.first_name;
 
     return bot.sendMessage(fromId, "Hello " + firstName + "! 😊\nHope you will enjoy the daily quotes!\n\n" +
-    "Type /help when needed.");
+    "-Type /help when needed.\n-Type /list to list available writers.s");
+});
+
+bot.on('/list', msg => {
+    let fromId = msg.from.id;
+
+    return bot.sendMessage(fromId, "List of available writers:\n\n-/Paulo\n-/Kafka\n-/OscarWilde");
 });
 
 bot.on(['/paulo','/Paulo','/PAULO'], msg => {
