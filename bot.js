@@ -11,6 +11,7 @@ var PauloQuotes = [];
 var KafkaQuotes = [];
 var OscarQuotes = [];
 var EiensteinQuotes = [];
+var GhandiQuotes = [];
 var date = new Date();
 var month = date.getUTCMonth();
 var day;
@@ -27,6 +28,8 @@ function checkDates (writer) {
             FillOscarArray (newDate.getUTCMonth());
         else if (writer === 'einstein')
             FillEiensteinArray (newDate.getUTCMonth());
+        else if (writer === 'ghandi')
+            FillGhandiArray (newDate.getUTCMonth());
         month = newDate.getUTCMonth();
     }
 
@@ -37,6 +40,24 @@ function checkDates (writer) {
     else {
         day = newDay;
     }
+}
+
+function FillGhandiArray (page) {
+    url = 'https://www.goodreads.com/author/quotes/5810891.Mahatma_Gandhi?page=' + page;
+    request(url, function(error, response, html) {
+        if(!error) {
+            var $ = cheerio.load(html);
+
+            $('.quotes .quote .quoteDetails .quoteText').each (function (i, elm) {
+
+                var data = $(this).first().contents().filter (function () {
+                    return this.type === 'text';
+                }).text().replace(/[^a-zA-Z ]/g, "").trim();
+
+                GhandiQuotes.push(data + ".");
+            });
+        }
+    });
 }
 
 function FillEiensteinArray (page) {
@@ -146,7 +167,7 @@ bot.on('/start', msg => {
 bot.on('/list', msg => {
     let fromId = msg.from.id;
 
-    return bot.sendMessage(fromId, "List of available writers:\n\n-/Paulo\n-/Kafka\n-/OscarWilde\n-/Einstein");
+    return bot.sendMessage(fromId, "List of available writers:\n\n-/Paulo\n-/Kafka\n-/OscarWilde\n-/Einstein\n-/Ghandi");
 });
 
 bot.on(['/paulo','/Paulo','/PAULO'], msg => {
@@ -159,7 +180,7 @@ bot.on(['/paulo','/Paulo','/PAULO'], msg => {
     return bot.sendMessage(fromId, "🍂Today's Paulo quote:🍂\n\n" + PauloQuotes[day]);
 });
 
-bot.on(['/kafka','/Kafka','KAFKA'], msg => {
+bot.on(['/kafka','/Kafka','/KAFKA'], msg => {
     let fromId = msg.from.id;
     let firstName = msg.from.first_name;
     let lastName = msg.from.last_name;
@@ -169,7 +190,7 @@ bot.on(['/kafka','/Kafka','KAFKA'], msg => {
     return bot.sendMessage(fromId, "🍂Today's Kafka quote:🍂\n\n" + KafkaQuotes[day]);
 });
 
-bot.on(['/Einstein','/einstein','EINSTEIN'], msg => {
+bot.on(['/Einstein','/einstein','/EINSTEIN'], msg => {
     let fromId = msg.from.id;
     let firstName = msg.from.first_name;
     let lastName = msg.from.last_name;
@@ -179,7 +200,17 @@ bot.on(['/Einstein','/einstein','EINSTEIN'], msg => {
     return bot.sendMessage(fromId, "🍂Today's Einstein quote:🍂\n\n" + EiensteinQuotes[day]);
 });
 
-bot.on(['/oscar','/Oscar','oscarWilde','OSCARWILDE'], msg => {
+bot.on(['/Ghandi','/ghandi','/GHANDI'], msg => {
+    let fromId = msg.from.id;
+    let firstName = msg.from.first_name;
+    let lastName = msg.from.last_name;
+
+    checkDates('ghandi');
+    console.log (new Date() + ": " + firstName + " " + lastName + " checked Ghandi");
+    return bot.sendMessage(fromId, "🍂Today's Ghandi quote:🍂\n\n" + GhandiQuotes[day]);
+});
+
+bot.on(['/oscar','/Oscar','/oscarWilde','/OSCARWILDE'], msg => {
     let fromId = msg.from.id;
     let firstName = msg.from.first_name;
     let lastName = msg.from.last_name;
@@ -195,5 +226,6 @@ FillPauloArray(month);
 FillKafkaArray(month);
 FillOscarArray(month);
 FillEiensteinArray(month);
+FillGhandiArray(month);
 app.listen(PORT)
 exports = module.exports = app;
