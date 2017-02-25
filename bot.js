@@ -77,7 +77,7 @@ bot.on(['/paulo','/Paulo','/PAULO'], msg => {
     if (day === 31) {
         day = 0;
     }
-    return bot.sendMessage(fromId, "Today's Paulo quote:\n" + PauloQuotes[day]);
+    return bot.sendMessage(fromId, "🍂Today's Paulo quote:🍂\n\n" + PauloQuotes[day]);
 });
 
 bot.on(['/kafka','/Kafka','KAFKA'], msg => {
@@ -94,7 +94,7 @@ bot.on(['/kafka','/Kafka','KAFKA'], msg => {
     if (day === 31) {
         day = 0;
     }
-    return bot.sendMessage(fromId, "Today's Kafka quote:\n" + KafkaQuotes[day]);
+    return bot.sendMessage(fromId, "🍂Today's Kafka quote:🍂\n\n" + KafkaQuotes[day]);
 });
 bot.connect();
 
