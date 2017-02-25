@@ -9,9 +9,27 @@ const bot = new TeleBot('305749132:AAF7gJgtnYp4lV4K1cRZ4ANv5eA6xe3rHjs');
 
 var PauloQuotes = [];
 var KafkaQuotes = [];
+var OscarQuotes = [];
 var date = new Date();
 var month = date.getUTCMonth();
 
+function checkDates (writer) {
+    var newDate = new Date();
+    if (newDate.getUTCMonth() > month) {
+        if (writer === 'paulo')
+            FillPauloArray (newDate.getUTCMonth());
+        else if (writer === 'kafka')
+            FillKafkaArray (newDate.getUTCMonth());
+        else if (writer === 'oscar')
+            FillOscarArray (newDate.getUTCMonth());
+        month = newDate.getUTCMonth();
+    }
+
+    var day = date.getUTCDate();
+    if (day === 31) {
+        day = 0;
+    }
+}
 
 function FillPauloArray (page) {
     url = 'https://www.goodreads.com/author/quotes/566.Paulo_Coelho?page=' + page;
@@ -26,6 +44,24 @@ function FillPauloArray (page) {
                 }).text().replace(/[^a-zA-Z ]/g, "").trim();
 
                 PauloQuotes.push(data + ".");
+            });
+        }
+    });
+}
+
+function FillOscarArray (page) {
+    url = 'https://www.goodreads.com/author/quotes/3565.Oscar_Wilde?page=' + page;
+    request(url, function(error, response, html) {
+        if(!error) {
+            var $ = cheerio.load(html);
+
+            $('.quotes .quote .quoteDetails .quoteText').each (function (i, elm) {
+
+                var data = $(this).first().contents().filter (function () {
+                    return this.type === 'text';
+                }).text().replace(/[^a-zA-Z ]/g, "").trim();
+
+                OscarQuotes.push(data + ".");
             });
         }
     });
@@ -53,7 +89,7 @@ bot.on(['/help','audio','voice','photo'], msg => {
     let fromId = msg.from.id;
 
     return bot.sendMessage(fromId, "Type / followed by writer's name to get the daily quote!" + 
-    "\n\nExample:\n/paulo\n\nList of available writers:\n-Paulo\n-Kafka");
+    "\n\nExample:\n/paulo\n\nList of available writers:\n-Paulo\n-Kafka\n-OscarWilde");
 });
 
 bot.on('/start', msg => {
@@ -66,37 +102,25 @@ bot.on('/start', msg => {
 
 bot.on(['/paulo','/Paulo','/PAULO'], msg => {
     let fromId = msg.from.id;
-    let firstName = msg.from.first_name;
 
-    var newDate = new Date();
-    if (newDate.getUTCMonth() > month) {
-        FillPauloArray (newDate.getUTCMonth());
-        month = newDate.getUTCMonth();
-    }
-
-    var day = date.getUTCDate();
-    if (day === 31) {
-        day = 0;
-    }
+    checkDates('paulo');
     return bot.sendMessage(fromId, "🍂Today's Paulo quote:🍂\n\n" + PauloQuotes[day]);
 });
 
 bot.on(['/kafka','/Kafka','KAFKA'], msg => {
     let fromId = msg.from.id;
-    let firstName = msg.from.first_name;
 
-    var newDate = new Date();
-    if (newDate.getUTCMonth() > month) {
-        FillPauloArray (newDate.getUTCMonth());
-        month = newDate.getUTCMonth();
-    }
-
-    var day = date.getUTCDate();
-    if (day === 31) {
-        day = 0;
-    }
+    checkDates('kafka');
     return bot.sendMessage(fromId, "🍂Today's Kafka quote:🍂\n\n" + KafkaQuotes[day]);
 });
+
+bot.on(['/OscarWilde','/oscarwilde','oscarWilde','OSCARWILDE'], msg => {
+    let fromId = msg.from.id;
+
+    checkDates('oscar');
+    return bot.sendMessage(fromId, "🍂Today's Oscar quote:🍂\n\n" + OscarQuotes[day]);
+});
+
 bot.connect();
 
 
