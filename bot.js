@@ -2,6 +2,7 @@ var express = require('express');
 var request = require('request');
 var cheerio = require('cheerio');
 var app     = express();
+var PORT = process.env.PORT || 3005;
 
 const TeleBot = require('telebot');
 const bot = new TeleBot('305749132:AAF7gJgtnYp4lV4K1cRZ4ANv5eA6xe3rHjs');
@@ -12,7 +13,6 @@ var date = new Date();
 var month = date.getUTCMonth();
 
 
-//Paulo
 function FillPauloArray (page) {
     url = 'https://www.goodreads.com/author/quotes/566.Paulo_Coelho?page=' + page;
     request(url, function(error, response, html) {
@@ -31,7 +31,6 @@ function FillPauloArray (page) {
     });
 }
 
-//Kafka
 function FillKafkaArray (page) {
     url = 'https://www.goodreads.com/author/quotes/5223.Franz_Kafka?page=' + page;
     request(url, function(error, response, html) {
@@ -102,5 +101,5 @@ bot.connect();
 
 FillPauloArray(month);
 FillKafkaArray(month);
-app.listen('3005')
+app.listen(PORT)
 exports = module.exports = app;
