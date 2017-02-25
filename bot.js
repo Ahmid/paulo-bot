@@ -155,7 +155,7 @@ bot.on(['/paulo','/Paulo','/PAULO'], msg => {
     let lastName = msg.from.last_name;
 
     checkDates('paulo');
-    console.log (firstName + " " + lastName + " checked paulo");
+    console.log (new Date() + ": " + firstName + " " + lastName + " checked paulo");
     return bot.sendMessage(fromId, "🍂Today's Paulo quote:🍂\n\n" + PauloQuotes[day]);
 });
 
@@ -165,7 +165,7 @@ bot.on(['/kafka','/Kafka','KAFKA'], msg => {
     let lastName = msg.from.last_name;
 
     checkDates('kafka');
-    console.log (firstName + " " + lastName + " checked kafka");
+    console.log (new Date() + ": " + firstName + " " + lastName + " checked kafka");
     return bot.sendMessage(fromId, "🍂Today's Kafka quote:🍂\n\n" + KafkaQuotes[day]);
 });
 
@@ -175,7 +175,7 @@ bot.on(['/Einstein','/einstein','EINSTEIN'], msg => {
     let lastName = msg.from.last_name;
 
     checkDates('einstein');
-    console.log (firstName + " " + lastName + " checked einstien");
+    console.log (new Date() + ": " + firstName + " " + lastName + " checked einstien");
     return bot.sendMessage(fromId, "🍂Today's Einstein quote:🍂\n\n" + EiensteinQuotes[day]);
 });
 
@@ -185,7 +185,7 @@ bot.on(['/oscar','/Oscar','oscarWilde','OSCARWILDE'], msg => {
     let lastName = msg.from.last_name;
 
     checkDates('oscar');
-    console.log (firstName + " " + lastName + " checked oscar");
+    console.log (new Date() + ": " + firstName + " " + lastName + " checked oscar");
     return bot.sendMessage(fromId, "🍂Today's Oscar quote:🍂\n\n" + OscarQuotes[day]);
 });
 
