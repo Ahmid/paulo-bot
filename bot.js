@@ -188,7 +188,7 @@ bot.on('/start', msg => {
 bot.on('/list', msg => {
     let fromId = msg.from.id;
 
-    return bot.sendMessage(fromId, "List of available writers:\n\n-/Paulo\n-/Kafka\n-/OscarWilde\n-/Einstein\n-/Ghandi"+
+    return bot.sendMessage(fromId, "List of available writers:\n\n-/Paulo\n-/Kafka\n-/Oscar\n-/Einstein\n-/Ghandi"+
     "\n-/Mark");
 });
 
