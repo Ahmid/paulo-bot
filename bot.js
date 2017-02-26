@@ -55,7 +55,7 @@ function FillGhandiArray (page) {
 
                 var data = $(this).first().contents().filter (function () {
                     return this.type === 'text';
-                }).text().replace(/[^a-zA-Z ]/g, "").trim();
+                }).text().replace('―',"").trim();
 
                 GhandiQuotes.push(data + ".");
             });
@@ -73,7 +73,7 @@ function FillEiensteinArray (page) {
 
                 var data = $(this).first().contents().filter (function () {
                     return this.type === 'text';
-                }).text().replace(/[^a-zA-Z ]/g, "").trim();
+                }).text().replace('―',"").trim();
 
                 EiensteinQuotes.push(data + ".");
             });
@@ -91,7 +91,7 @@ function FillPauloArray (page) {
 
                 var data = $(this).first().contents().filter (function () {
                     return this.type === 'text';
-                }).text().replace(/[^a-zA-Z ]/g, "").trim();
+                }).text().replace('―',"").trim();
 
                 PauloQuotes.push(data + ".");
             });
@@ -109,7 +109,7 @@ function FillOscarArray (page) {
 
                 var data = $(this).first().contents().filter (function () {
                     return this.type === 'text';
-                }).text().replace(/[^a-zA-Z ]/g, "").trim();
+                }).text().replace('―',"").trim();
 
                 OscarQuotes.push(data + ".");
             });
@@ -127,7 +127,7 @@ function FillKafkaArray (page) {
 
                 var data = $(this).first().contents().filter (function () {
                     return this.type === 'text';
-                }).text().replace(/[^a-zA-Z ]/g, "").trim();
+                }).text().replace('―',"").trim();
 
                 KafkaQuotes.push(data + ".");
             });
@@ -145,7 +145,7 @@ function FillMarkArray (page) {
 
                 var data = $(this).first().contents().filter (function () {
                     return this.type === 'text';
-                }).text().replace(/[^a-zA-Z ]/g, "").trim();
+                }).text().replace('―',"").trim();
 
                 MarkQuotes.push(data + ".");
             });
