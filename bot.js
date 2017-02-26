@@ -57,7 +57,7 @@ function FillGhandiArray (page) {
                     return this.type === 'text';
                 }).text().replace('―',"").trim();
 
-                GhandiQuotes.push(data + ".");
+                GhandiQuotes.push(data);
             });
         }
     });
@@ -75,7 +75,7 @@ function FillEiensteinArray (page) {
                     return this.type === 'text';
                 }).text().replace('―',"").trim();
 
-                EiensteinQuotes.push(data + ".");
+                EiensteinQuotes.push(data);
             });
         }
     });
@@ -93,7 +93,7 @@ function FillPauloArray (page) {
                     return this.type === 'text';
                 }).text().replace('―',"").trim();
 
-                PauloQuotes.push(data + ".");
+                PauloQuotes.push(data);
             });
         }
     });
@@ -111,7 +111,7 @@ function FillOscarArray (page) {
                     return this.type === 'text';
                 }).text().replace('―',"").trim();
 
-                OscarQuotes.push(data + ".");
+                OscarQuotes.push(data);
             });
         }
     });
@@ -129,7 +129,7 @@ function FillKafkaArray (page) {
                     return this.type === 'text';
                 }).text().replace('―',"").trim();
 
-                KafkaQuotes.push(data + ".");
+                KafkaQuotes.push(data);
             });
         }
     });
@@ -147,7 +147,7 @@ function FillMarkArray (page) {
                     return this.type === 'text';
                 }).text().replace('―',"").trim();
 
-                MarkQuotes.push(data + ".");
+                MarkQuotes.push(data);
             });
         }
     });
