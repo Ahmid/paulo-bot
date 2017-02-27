@@ -13,6 +13,7 @@ var OscarQuotes = [];
 var EiensteinQuotes = [];
 var GhandiQuotes = [];
 var MarkQuotes = [];
+var NietzscheQuotes = [];
 var date = new Date();
 var month = date.getUTCMonth();
 var day;
@@ -33,10 +34,12 @@ function checkDates (writer) {
             FillGhandiArray (newDate.getUTCMonth());
         else if (writer === 'mark')
             FillMarkArray (newDate.getUTCMonth());
+        else if (writer === 'nietzsche')
+            FillNietzscheArray (newDate.getUTCMonth());
         month = newDate.getUTCMonth();
     }
 
-    var newDay = newDate.getUTCDate();
+    var newDay = newDate.getDate();
     if (newDay === 31) {
         day = 0;
     }
@@ -57,6 +60,11 @@ function FillGhandiArray (page) {
                     return this.type === 'text';
                 }).text().replace('―',"").trim();
 
+                if (data.charAt(data.length - 1) == ',') {
+                    data = data.substr(0, data.length - 1);
+                }
+                data.trim();
+
                 GhandiQuotes.push(data);
             });
         }
@@ -74,6 +82,11 @@ function FillEiensteinArray (page) {
                 var data = $(this).first().contents().filter (function () {
                     return this.type === 'text';
                 }).text().replace('―',"").trim();
+                
+                if (data.charAt(data.length - 1) == ',') {
+                    data = data.substr(0, data.length - 1);
+                }
+                data.trim();
 
                 EiensteinQuotes.push(data);
             });
@@ -93,6 +106,10 @@ function FillPauloArray (page) {
                     return this.type === 'text';
                 }).text().replace('―',"").trim();
 
+                if (data.charAt(data.length - 1) == ',') {
+                    data = data.substr(0, data.length - 1);
+                }
+                data.trim();
                 PauloQuotes.push(data);
             });
         }
@@ -110,6 +127,11 @@ function FillOscarArray (page) {
                 var data = $(this).first().contents().filter (function () {
                     return this.type === 'text';
                 }).text().replace('―',"").trim();
+
+                if (data.charAt(data.length - 1) == ',') {
+                    data = data.substr(0, data.length - 1);
+                }
+                data.trim();
 
                 OscarQuotes.push(data);
             });
@@ -129,6 +151,11 @@ function FillKafkaArray (page) {
                     return this.type === 'text';
                 }).text().replace('―',"").trim();
 
+                if (data.charAt(data.length - 1) == ',') {
+                    data = data.substr(0, data.length - 1);
+                }
+                data.trim();
+
                 KafkaQuotes.push(data);
             });
         }
@@ -147,7 +174,35 @@ function FillMarkArray (page) {
                     return this.type === 'text';
                 }).text().replace('―',"").trim();
 
+                if (data.charAt(data.length - 1) == ',') {
+                    data = data.substr(0, data.length - 1);
+                }
+                data.trim();
+
                 MarkQuotes.push(data);
+            });
+        }
+    });
+}
+
+function FillNietzscheArray (page) {
+    url = 'https://www.goodreads.com/author/quotes/1938.Friedrich_Nietzsche?page=' + page;
+    request(url, function(error, response, html) {
+        if(!error) {
+            var $ = cheerio.load(html);
+
+            $('.quotes .quote .quoteDetails .quoteText').each (function (i, elm) {
+
+                var data = $(this).first().contents().filter (function () {
+                    return this.type === 'text';
+                }).text().replace('―',"").trim();
+
+                if (data.charAt(data.length - 1) == ',') {
+                    data = data.substr(0, data.length - 1);
+                }
+                data.trim();
+
+                NietzscheQuotes.push(data);
             });
         }
     });
@@ -189,7 +244,7 @@ bot.on('/list', msg => {
     let fromId = msg.from.id;
 
     return bot.sendMessage(fromId, "List of available writers:\n\n-/Paulo\n-/Kafka\n-/Oscar\n-/Einstein\n-/Ghandi"+
-    "\n-/Mark");
+    "\n-/Mark\n-/Nietzsche");
 });
 
 bot.on(['/paulo','/Paulo','/PAULO'], msg => {
@@ -199,6 +254,7 @@ bot.on(['/paulo','/Paulo','/PAULO'], msg => {
 
     checkDates('paulo');
     console.log (new Date() + ": " + firstName + " " + lastName + " checked paulo");
+
     return bot.sendMessage(fromId, "🍂Today's Paulo quote:🍂\n\n" + PauloQuotes[day]);
 });
 
@@ -251,7 +307,16 @@ bot.on(['/mark','/Mark','/MARK'], msg => {
     console.log (new Date() + ": " + firstName + " " + lastName + " checked Mark");
     return bot.sendMessage(fromId, "🍂Today's Mark quote:🍂\n\n" + MarkQuotes[day]);
 });
-bot.connect();
+
+bot.on(['/nietzsche','/Nietzsche','/NIETZSCHE'], msg => {
+    let fromId = msg.from.id;
+    let firstName = msg.from.first_name;
+    let lastName = msg.from.last_name;
+
+    checkDates('nietzsche');
+    console.log (new Date() + ": " + firstName + " " + lastName + " checked Nietzsche");
+    return bot.sendMessage(fromId, "🍂Today's Nietzsche quote:🍂\n\n" + NietzscheQuotes[day]);
+});
 
 FillPauloArray(month);
 FillKafkaArray(month);
@@ -259,5 +324,7 @@ FillOscarArray(month);
 FillEiensteinArray(month);
 FillGhandiArray(month);
 FillMarkArray(month);
+FillNietzscheArray(month);
+bot.connect();
 app.listen(PORT)
 exports = module.exports = app;
