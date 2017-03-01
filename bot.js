@@ -14,8 +14,9 @@ var EiensteinQuotes = [];
 var GhandiQuotes = [];
 var MarkQuotes = [];
 var NietzscheQuotes = [];
+
 var date = new Date();
-var month = date.getUTCMonth();
+var month = date.getMonth();
 var day;
 
 
@@ -316,6 +317,56 @@ bot.on(['/nietzsche','/Nietzsche','/NIETZSCHE'], msg => {
     checkDates('nietzsche');
     console.log (new Date() + ": " + firstName + " " + lastName + " checked Nietzsche");
     return bot.sendMessage(fromId, "🍂Today's Nietzsche quote:🍂\n\n" + NietzscheQuotes[day]);
+});
+
+bot.on ('inlineQuery', msg => {
+    let query = msg.query;
+    console.log ('Inline Query: ' + query);
+    var reply;
+    const answers = bot.answerList(msg.id, { cacheTime: 60 });
+    query.toLowerCase();
+
+    if (query) {
+        if (query === 'paulo') {
+            checkDates('paulo');
+            reply = "🍂Today's Paulo quote:🍂\n\n" + PauloQuotes[day];
+        }
+        else if (query === 'einstein') {
+            checkDates('einstein');
+            reply = "🍂Today's Einstein quote:🍂\n\n" + EiensteinQuotes[day];
+        }
+        else if (query === 'kafka') {
+            checkDates('kafka');
+            reply = "🍂Today's Kafka quote:🍂\n\n" + KafkaQuotes[day];
+        }
+        else if (query === 'ghandi') {
+            checkDates('ghandi');
+            reply = "🍂Today's Ghandi quote:🍂\n\n" + GhandiQuotes[day];
+        }
+        else if (query === 'oscar') {
+            checkDates('oscar');
+            reply = "🍂Today's Oscar quote:🍂\n\n" + OscarQuotes[day];
+        }
+        else if (query === 'nietzsche') {
+            checkDates('nietzsche');
+            reply = "🍂Today's Nietzsche quote:🍂\n\n" + NietzscheQuotes[day];
+        }
+        else if (query === 'mark') {
+            checkDates('mark');
+            reply = "🍂Today's Mark quote:🍂\n\n" + MarkQuotes[day];
+        }
+        
+        if (reply) {
+            answers.addArticle({
+                id: 'query',
+                title: 'Quote of the day:',
+                description: `Your query: ${ query }`,
+                message_text: reply
+            });
+
+            return bot.answerQuery(answers);
+        }
+    }
 });
 
 FillPauloArray(month);
