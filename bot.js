@@ -2,8 +2,9 @@ var express = require('express');
 var request = require('request');
 var cheerio = require('cheerio');
 var app     = express();
-var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8080
-var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
+//var server_port = process.env.NODE || process.env.OPENSHIFT_NODEJS_PORT || 8080
+//var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
+var PORT = process.env.PORT || 3005;
 
 const TeleBot = require('telebot');
 const bot = new TeleBot('305749132:AAF7gJgtnYp4lV4K1cRZ4ANv5eA6xe3rHjs');
@@ -378,7 +379,5 @@ FillGhandiArray(month);
 FillMarkArray(month);
 FillNietzscheArray(month);
 bot.connect();
-app.listen(server_port, server_ip_address, function () {
-  console.log( "Listening on " + server_ip_address + ", port " + server_port )
-});
+app.listen(PORT);
 exports = module.exports = app;
