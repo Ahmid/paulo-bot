@@ -10,9 +10,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cheerio": "latest",
     "express": "^4.14.1",
+    "node-rest-client": "^3.0.3",
+    "request": "latest",
+    "sentiment": "^3.0.1",
     "telebot": "^1.0.7",
-    "request"    : "latest",
-    "cheerio"    : "latest"
+    "underscore": "^1.8.3",
+    "unirest": "^0.5.1",
+    "wordpos": "^1.1.2"
   }
 }

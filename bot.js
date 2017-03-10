@@ -1,6 +1,10 @@
 var express = require('express');
 var request = require('request');
 var cheerio = require('cheerio');
+var sentiment = require('sentiment');
+var WordPOS = require('wordpos');
+var _ = require ('underscore');
+var unirest = require('unirest');
 var app     = express();
 //var server_port = process.env.NODE || process.env.OPENSHIFT_NODEJS_PORT || 8080
 //var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
@@ -8,6 +12,7 @@ var PORT = process.env.PORT || 3005;
 
 const TeleBot = require('telebot');
 const bot = new TeleBot('305749132:AAF7gJgtnYp4lV4K1cRZ4ANv5eA6xe3rHjs');
+const authKey = "EnwH9yMqnDmshjBGYeGRdRW5NJf8p1CVCy6jsngiXenHl1PL5W";
 
 var PauloQuotes = [];
 var KafkaQuotes = [];
@@ -16,7 +21,9 @@ var EiensteinQuotes = [];
 var GhandiQuotes = [];
 var MarkQuotes = [];
 var NietzscheQuotes = [];
+var GabrielQuotes = [];
 
+var wordpos = new WordPOS();
 var date = new Date();
 var month = date.getMonth();
 var day;
@@ -39,6 +46,8 @@ function checkDates (writer) {
             FillMarkArray (newDate.getUTCMonth());
         else if (writer === 'nietzsche')
             FillNietzscheArray (newDate.getUTCMonth());
+        else if (writer === 'gabriel')
+            FillGabrielArray (newDate.getUTCMonth());
         month = newDate.getUTCMonth();
     }
 
@@ -211,6 +220,29 @@ function FillNietzscheArray (page) {
     });
 }
 
+function FillGabrielArray (page) {
+    url = 'https://www.goodreads.com/author/quotes/13450.Gabriel_Garc_a_M_rquez?page=' + page;
+    request(url, function(error, response, html) {
+        if(!error) {
+            var $ = cheerio.load(html);
+
+            $('.quotes .quote .quoteDetails .quoteText').each (function (i, elm) {
+
+                var data = $(this).first().contents().filter (function () {
+                    return this.type === 'text';
+                }).text().replace('―',"").trim();
+
+                if (data.charAt(data.length - 1) == ',') {
+                    data = data.substr(0, data.length - 1);
+                }
+                data.trim();
+
+                GabrielQuotes.push(data);
+            });
+        }
+    });
+}
+
 bot.on(['audio','voice','photo'], msg => {
     let fromId = msg.from.id;
 
@@ -247,7 +279,7 @@ bot.on('/list', msg => {
     let fromId = msg.from.id;
 
     return bot.sendMessage(fromId, "List of available writers:\n\n-/Paulo\n-/Kafka\n-/Oscar\n-/Einstein\n-/Ghandi"+
-    "\n-/Mark\n-/Nietzsche");
+    "\n-/Mark\n-/Nietzsche\n-/Gabriel");
 });
 
 bot.on(['/paulo','/Paulo','/PAULO'], msg => {
@@ -321,6 +353,16 @@ bot.on(['/nietzsche','/Nietzsche','/NIETZSCHE'], msg => {
     return bot.sendMessage(fromId, "🍂Today's Nietzsche quote:🍂\n\n" + NietzscheQuotes[day]);
 });
 
+bot.on(['/Gabriel','/gabriel','/GABRIEL'], msg => {
+    let fromId = msg.from.id;
+    let firstName = msg.from.first_name;
+    let lastName = msg.from.last_name;
+
+    checkDates('gabriel');
+    console.log (new Date() + ": " + firstName + " " + lastName + " checked Gabriel");
+    return bot.sendMessage(fromId, "🍂Today's Gabriel quote:🍂\n\n" + GabrielQuotes[day]);
+});
+
 bot.on ('inlineQuery', msg => {
     let query = msg.query;
     console.log ('Inline Query: ' + query);
@@ -357,6 +399,10 @@ bot.on ('inlineQuery', msg => {
             checkDates('mark');
             reply = "🍂Today's Mark quote:🍂\n\n" + MarkQuotes[day];
         }
+        else if (query === 'gabriel') {
+            checkDates('gabriel');
+            reply = "🍂Today's Gabriel quote:🍂\n\n" + GabrielQuotes[day];
+        }
         
         if (reply) {
             answers.addArticle({
@@ -371,6 +417,112 @@ bot.on ('inlineQuery', msg => {
     }
 });
 
+function removeI (sentence) {
+
+    for (var i=sentence.length-1; i>=0; i--) {
+        if (sentence[i] === 'I') {
+            sentence.splice(i, 1);
+        }
+    }
+    return sentence;
+}
+
+// bot.on('text', msg => {
+//     let txt = msg.text;
+//     let firstName = msg.from.first_name;
+//     let lastName = msg.from.last_name;
+
+//     console.log (new Date() + ": " + firstName + " " + lastName + " mood: " + txt);
+//     wordpos.getAdjectives(txt, function (result) {
+//         var userAdj=result;
+//         if (userAdj.length == 0) {
+//             bot.sendMessage(msg.from.id, "Can not detect your mood, please try again using different words.");
+//             return;
+//         }
+//         else {
+//             var sent = sentiment(txt);
+//             var random = Math.round(Math.random() * (8 - 1) + 1);
+//             var found = false;
+//             userAdj = removeI(userAdj);
+
+//             if(sent.score != 0) {
+//                     //check if user is negative, search for positive quote and send it!
+//                     if (sent.score < 0) { 
+//                         url = "https://wordsapiv1.p.mashape.com/words/" + userAdj[0] + "/antonyms";
+//                            unirest.get(url)
+//                            .header("X-Mashape-Key", authKey)
+//                            .header("Accept", "application/json")
+//                            .end(function (result) {
+         
+//                                 console.log(result.body.antonyms);
+//                                 var quoteAdj = result.body.antonyms;
+
+//                                 for (var i=0; i<PauloQuotes.length;i++)
+//                                 {   
+//                                     var Qsent = sentiment (PauloQuotes[i]);
+//                                     if (Qsent.score >= 2) {
+//                                         found = true;
+//                                         bot.sendMessage(msg.from.id, "☀Paulo Coelho: \n\n" + PauloQuotes[i]);
+//                                         return;
+//                                     }
+//                                 }
+//                             });
+//                             if (found) {
+//                                 return;
+//                             }
+//                     }
+//                     //user is positive, search for similar adjectives in a quote and send it!
+//                     else {
+//                         var found = false;
+//                         var counter = 0;
+//                         while (!found) {
+//                             var page = Math.round(Math.random() * (100 - 1) + 1);
+//                             var url = 'http://www.goodreads.com/quotes/tag/inspirational?page=' + page;
+//                             if (counter == 6) {
+//                                 break;
+//                             }
+//                             request(url, function(error, response, html) {
+//                                 if(!error) {
+//                                     var $ = cheerio.load(html);
+//                                     $('.quotes .quote .quoteDetails .quoteText').each (function (i, elm) {
+
+//                                         var data = $(this).first().contents().filter (function () {
+//                                             return this.type === 'text';
+//                                         }).text().replace('―',"").trim();
+
+//                                         if (data.charAt(data.length - 1) == ',') {
+//                                             data = data.substr(0, data.length - 1);
+//                                         }
+//                                         data.trim();
+//                                         console.log(data);
+//                                         //check if the quote contains user adjectives
+//                                         quoteAdj = data.split(' ');
+//                                         console.log (quoteAdj);
+//                                         if (_.intersection(userAdj, quoteAdj).length > 0) {
+//                                             bot.sendMessage(msg.from.id, "☀" + data);
+//                                             found = true;
+//                                             return;
+//                                         }
+//                                     });
+//                                     counter++;
+//                                 }
+//                             });
+//                         }
+//                         if (!found) {
+//                             bot.sendMessage(msg.from.id, "Try another mood!");
+//                         }
+//                     }
+//             }
+//             else {
+//                 bot.sendMessage(msg.from.id, "Can not detect your mood, please try again using different words.");
+//                 return;
+//             }
+//         }//end else
+//     });
+// });
+
+
+
 FillPauloArray(month);
 FillKafkaArray(month);
 FillOscarArray(month);
@@ -378,6 +530,7 @@ FillEiensteinArray(month);
 FillGhandiArray(month);
 FillMarkArray(month);
 FillNietzscheArray(month);
+FillGabrielArray(month);
 bot.connect();
 app.listen(PORT);
 exports = module.exports = app;
