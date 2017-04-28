@@ -396,7 +396,7 @@ bot.on(['/Mahmoud','/mahmoud','/MAHMOUD',], msg => {
 
     checkDates('mahmodD');
     console.log (new Date() + ": " + firstName + " " + lastName + " checked Mahmoud Darwiche");
-    return bot.sendMessage(fromId, "🍂Today's Mahmoud Dawriche's quote:🍂\n\n" + MahmodDQuotes[day]);
+    return bot.sendMessage(fromId, "🍂Today's Mahmoud Dawriche's quote:🍂\n\n" + MahmoudDQuotes[day]);
 });
 
 bot.on ('inlineQuery', msg => {
