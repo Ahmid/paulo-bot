@@ -389,7 +389,7 @@ bot.on(['/Gabriel','/gabriel','/GABRIEL'], msg => {
     return bot.sendMessage(fromId, "🍂Today's Gabriel quote:🍂\n\n" + GabrielQuotes[day]);
 });
 
-bot.on(['/MahmoudD','/mahmoudD','/MAHMOUDD',], msg => {
+bot.on(['/Mahmoud','/mahmoud','/MAHMOUD',], msg => {
     let fromId = msg.from.id;
     let firstName = msg.from.first_name;
     let lastName = msg.from.last_name;
