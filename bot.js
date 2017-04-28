@@ -52,7 +52,7 @@ function checkDates (writer) {
     }
 
     var newDay = newDate.getDate();
-    if (newDay === 31) {
+    if (newDay === 31 || newDay === 30) {
         day = 0;
     }
     else {
