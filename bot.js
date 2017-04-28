@@ -331,7 +331,7 @@ bot.on('/list', msg => {
     let fromId = msg.from.id;
 
     return bot.sendMessage(fromId, "List of available writers:\n\n-/Paulo\n-/Kafka\n-/Oscar\n-/Einstein\n-/Ghandi"+
-    "\n-/Mark\n-/Nietzsche\n-/Gabriel");
+    "\n-/Mark\n-/Nietzsche\n-/Gabriel\n-Mahmoud\n-Nizar");
 });
 
 bot.on(['/paulo','/Paulo','/PAULO'], msg => {
