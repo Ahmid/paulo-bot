@@ -22,6 +22,7 @@ var GhandiQuotes = [];
 var MarkQuotes = [];
 var NietzscheQuotes = [];
 var GabrielQuotes = [];
+var MahmoudDQuotes = [];
 
 var wordpos = new WordPOS();
 var date = new Date();
@@ -48,6 +49,8 @@ function checkDates (writer) {
             FillNietzscheArray (newDate.getUTCMonth());
         else if (writer === 'gabriel')
             FillGabrielArray (newDate.getUTCMonth());
+        else if (writer === 'mahmoud')
+            FillMahmoudDArray (newDate.getUTCMonth());
         month = newDate.getUTCMonth();
     }
 
@@ -243,6 +246,29 @@ function FillGabrielArray (page) {
     });
 }
 
+function FillMahmoudDArray (page) {
+    url = 'https://www.goodreads.com/author/quotes/75055.Mahmoud_Darwish?page=' + page;
+    request(url, function(error, response, html) {
+        if(!error) {
+            var $ = cheerio.load(html);
+
+            $('.quotes .quote .quoteDetails .quoteText').each (function (i, elm) {
+
+                var data = $(this).first().contents().filter (function () {
+                    return this.type === 'text';
+                }).text().replace('―',"").trim();
+
+                if (data.charAt(data.length - 1) == ',') {
+                    data = data.substr(0, data.length - 1);
+                }
+                data.trim();
+
+                MahmoudDQuotes.push(data);
+            });
+        }
+    });
+}
+
 bot.on(['audio','voice','photo'], msg => {
     let fromId = msg.from.id;
 
@@ -363,6 +389,16 @@ bot.on(['/Gabriel','/gabriel','/GABRIEL'], msg => {
     return bot.sendMessage(fromId, "🍂Today's Gabriel quote:🍂\n\n" + GabrielQuotes[day]);
 });
 
+bot.on(['/MahmoudD','/mahmoudD','/MAHMOUDD',], msg => {
+    let fromId = msg.from.id;
+    let firstName = msg.from.first_name;
+    let lastName = msg.from.last_name;
+
+    checkDates('mahmodD');
+    console.log (new Date() + ": " + firstName + " " + lastName + " checked Mahmoud Darwiche");
+    return bot.sendMessage(fromId, "🍂Today's Mahmoud Dawriche's quote:🍂\n\n" + MahmodDQuotes[day]);
+});
+
 bot.on ('inlineQuery', msg => {
     let query = msg.query;
     console.log ('Inline Query: ' + query);
@@ -403,7 +439,11 @@ bot.on ('inlineQuery', msg => {
             checkDates('gabriel');
             reply = "🍂Today's Gabriel quote:🍂\n\n" + GabrielQuotes[day];
         }
-        
+        else if (query === 'mahmoud') {
+            checkDates('mahmoud');
+            reply = "🍂Today's Mahmoud Darwish quote:🍂\n\n" + MahmoudDQuotes[day];
+        }
+
         if (reply) {
             answers.addArticle({
                 id: 'query',
@@ -531,6 +571,7 @@ FillGhandiArray(month);
 FillMarkArray(month);
 FillNietzscheArray(month);
 FillGabrielArray(month);
+FillMahmoudDArray(month);
 bot.connect();
 app.listen(PORT);
 exports = module.exports = app;
